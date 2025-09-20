@@ -1,31 +1,41 @@
 import React, { useState } from "react";
 import { useAuthStore } from "../../store/authStore";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button, TextField } from "@mui/material";
+import { motion } from "framer-motion";
+import { styled } from "@mui/system";
 
-// Statik foydalanuvchilar ro'yxati (ma'lumotlar bazasidan olinadi)
 const users = [
   {
     id: "admin",
-    email: "admin@example.com",
+    email: "admin@gmail.com",
     password: "admin123",
-    role: "admin", // Admin roli
+    role: "admin",
   },
   {
     id: "doctor1",
-    email: "admin@example.com",
+    email: "doctor1@example.com",
     password: "admin1234",
-    role: "doctor", // Doktor roli
+    role: "doctor",
   },
   {
     id: "reception1",
-    email: "admin@example.com",
+    email: "reception1@example.com",
     password: "admin12345",
-    role: "reception ", // Administrator roli
+    role: "reception",
   },
 ];
+
+const BackgroundBox = styled(Box)(() => ({
+  backgroundImage:
+    "url('https://t3.ftcdn.net/jpg/10/45/45/14/360_F_1045451449_6DF9ln8DYlJkb2uhqf7Qdo13vLuNMNm3.jpg')",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  height: "100vh",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -33,57 +43,102 @@ const LoginPage: React.FC = () => {
   const { setUser } = useAuthStore();
   const navigate = useNavigate();
 
-  // Foydalanuvchi loginini tekshirish
   const handleLogin = () => {
-    // Foydalanuvchilar ro'yxatini tekshiramiz
     const foundUser = users.find(
       (user) => user.email === email && user.password === password
     );
 
     if (foundUser) {
-      setUser(foundUser); // User ma'lumotlarini saqlash
-      // Rollarga qarab foydalanuvchini mos sahifaga yo'naltiramiz
-      if (foundUser.role === "admin") {
-        navigate("/admin"); // Admin panelga yo'naltirish
-      } else if (foundUser.role === "doctor") {
-        navigate("/doctor"); // Doctor panelga yo'naltirish
-      } else if (foundUser.role === "reception ") {
-        navigate("/reception"); // Administrator panelga yo'naltirish
+      setUser(foundUser);
+
+      // roliga qarab navigatsiya
+      switch (foundUser.role) {
+        case "admin":
+          navigate("/admin");
+          break;
+        case "doctor":
+          navigate("/doctor");
+          break;
+        case "reception":
+          navigate("/reception");
+          break;
+        default:
+          navigate("/");
       }
     } else {
-      alert("Email yoki parol noto‘g‘ri!");
+      alert("❌ Email yoki parol noto‘g‘ri!");
     }
   };
 
   return (
-    <Box sx={{ width: 300, mx: "auto", mt: 5 }}>
-      <Typography variant="h5">Sign In</Typography>
-      <TextField
-        label="Email"
-        variant="outlined"
-        fullWidth
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-      <TextField
-        label="Password"
-        variant="outlined"
-        type="password"
-        fullWidth
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        fullWidth
-        onClick={handleLogin}
+    <BackgroundBox>
+      <Box
+        sx={{
+          width: 400,
+          backdropFilter: "blur(8px)",
+          background: "rgba(255,255,255,0.9)",
+          padding: 5,
+          borderRadius: 3,
+          boxShadow: 10,
+        }}
       >
-        Login
-      </Button>
-    </Box>
+        {/* Logo & Title */}
+        <motion.div
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          style={{ textAlign: "center", marginBottom: 40 }}
+        >
+          <img
+            src="https://example.com/logo.png"
+            alt="MedTed Logo"
+            style={{ width: 120, marginBottom: 15 }}
+          />
+          <Typography variant="h5" color="primary" sx={{ fontWeight: "bold" }}>
+            MedTed Healthcare Portal
+          </Typography>
+        </motion.div>
+
+        {/* Form */}
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <TextField
+            label="Email"
+            variant="outlined"
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+          <TextField
+            label="Password"
+            variant="outlined"
+            type="password"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleLogin}
+            sx={{
+              py: 1.5,
+              fontWeight: "bold",
+              textTransform: "none",
+              fontSize: "16px",
+            }}
+          >
+            Login
+          </Button>
+        </motion.div>
+      </Box>
+    </BackgroundBox>
   );
 };
 

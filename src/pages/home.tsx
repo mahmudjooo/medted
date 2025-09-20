@@ -1,40 +1,28 @@
 import React, { useEffect } from "react";
-
 import { useNavigate } from "react-router-dom";
-
-import LoginPage from "./auth/login";
 import { useAuthStore } from "../store/authStore";
 
 const Home: React.FC = () => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
-  // Sayt ochilganda foydalanuvchi kirganmi yoki yo'qmi tekshiramiz
   useEffect(() => {
     if (!user) {
-      navigate("/login"); // Agar foydalanuvchi tizimga kirgan bo'lmasa, login sahifasiga yo'naltiramiz
+      navigate("/login");
     } else {
       if (user.role === "admin") {
-        navigate("/admin"); // Agar admin bo'lsa, admin panelga yo'naltiramiz
+        navigate("/admin");
       } else if (user.role === "doctor") {
-        navigate("/doctor"); // Agar doctor bo'lsa, doctor panelga yo'naltiramiz
-      } else if (user.role === "reception ") {
-        navigate("/reception "); // Agar administrator bo'lsa, administrator panelga yo'naltiramiz
+        navigate("/doctor");
+      } else if (user.role === "reception") {
+        navigate("/reception");
       }
     }
   }, [user, navigate]);
 
-  // Agar foydalanuvchi tizimga kirgan bo'lsa, Sidebar ko'rinadi
-  if (user) {
-    return (
-      <>
-        <h1>Welcome, {user.email}!</h1>
-      </>
-    );
-  }
-
-  // Agar foydalanuvchi tizimga kirmagan bo'lsa, LoginPage ko'rinadi
-  return <LoginPage />;
+  // Bu yerda hech narsa ko'rsatmasak ham bo‘ladi,
+  // chunki navigate avtomatik boshqa sahifaga yo‘naltiradi.
+  return null;
 };
 
 export default Home;

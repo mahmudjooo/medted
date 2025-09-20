@@ -19,6 +19,8 @@
     "@mui/material": "^7.3.2",
     "@mui/styled-engine-sc": "^7.3.2",
     "@mui/x-data-grid": "^8.11.3",
+    "axios": "^1.12.2",
+    "framer-motion": "^12.23.16",
     "mantis-ui": "^0.0.1-security",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

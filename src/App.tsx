@@ -1,66 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
 import LoginPage from "./pages/auth/login";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import MainLayout from "./companents/admin/MainLayout";
-import Patients from "./pages/admin/Patients";
-import Appointments from "./pages/admin/Appointments";
-import Users from "./pages/admin/Users";
-import Reports from "./pages/admin/Reports";
-import Settings from "./pages/admin/Settings";
-import Dashboard from "./pages/admin/dashboard";
-import DoctorLayout from "./companents/doctor/DoctorLayout";
-import DoctorDashboard from "./pages/doctor/Dashboard";
-import MyPatients from "./pages/doctor/MyPatients";
-import Profile from "./pages/doctor/Profile";
-import Records from "./pages/doctor/Records";
-import DoctorAppointments from "./pages/doctor/Appointments";
-import ReceptionLayout from "./companents/reception/ReceptionLayout";
-import ReceptionDashboard from "./pages/reception/Dashboard";
-import ReceptionPatients from "./pages/reception/Patients";
-import ReceptionAppointments from "./pages/reception/Appointments";
-import ReceptionBilling from "./pages/reception/Billing";
-import ReceptionProfile from "./pages/reception/Profile";
-import Schedule from "./pages/reception/Schedule";
+import axios from "axios";
+
+// Panel va Componentlar
+import DoctorList from "./companents/doctor/DoctorList";
+import DoctorProfile from "./companents/doctor/DoctorProfile";
+import AdminPanel from "./companents/admin/AdminPanel";
+import AdminLogin from "./companents/admin/AdminLogin";
+import ReceptionPanel from "./companents/resiption/ReceptionPanel";
 
 const theme = createTheme();
 
 const App: React.FC = () => {
+  const [doctors, setDoctors] = useState<any[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get("https://api.example.com/doctors")
+      .then((res) => setDoctors(res.data))
+      .catch((err) => console.error("Doctors API error:", err));
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Routes>
-        /*AminPanel*/
-        <Route path="/admin" element={<MainLayout />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/patients" element={<Patients />} />
-        <Route path="/admin/appointments" element={<Appointments />} />
-        <Route path="/admin/users" element={<Users />} />
-        <Route path="/admin/reports" element={<Reports />} />
-        <Route path="/admin/settings" element={<Settings />} />
-        /*DoctorPanel*/
-        <Route path="/doctor" element={<DoctorLayout />} />
-        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-        <Route path="/doctor/my-patients" element={<MyPatients />} />
-        <Route path="/doctor/appointments" element={<DoctorAppointments />} />
-        <Route path="/doctor/records" element={<Records />} />
-        <Route path="/doctor/profile" element={<Profile />} />
-        /*ReceptionPanel*/
-        <Route path="/reception" element={<ReceptionLayout />} />
-        <Route path="/reception/dashboard" element={<ReceptionDashboard />} />
-        <Route path="/reception/patients" element={<ReceptionPatients />} />
-        <Route
-          path="/reception/appointments"
-          element={<ReceptionAppointments />}
-        />
-        <Route path="/reception/schedule" element={<Schedule />} />
-        <Route path="/reception/billing" element={<ReceptionBilling />} />
-        <Route path="/reception/profile" element={<ReceptionProfile />} />
-        /*HomePage*/
+        {/* Home sahifasi */}
         <Route path="/" element={<Home />} />
-        /*LoginPage DefaultDesign*/
+
+        {/* Login */}
         <Route path="/login" element={<LoginPage />} />
+
+        {/* Doctors */}
+        <Route path="/doctors" element={<DoctorList doctors={doctors} />} />
+        <Route path="/doctors/:id" element={<DoctorProfile />} />
+
+        {/* Admin */}
+        <Route
+          path="/admin"
+          element={
+            isAdmin ? (
+              <AdminPanel />
+            ) : (
+              <AdminLogin onLogin={() => setIsAdmin(true)} />
+            )
+          }
+        />
+
+        {/* Reception */}
+        <Route path="/reception" element={<ReceptionPanel />} />
       </Routes>
     </ThemeProvider>
   );
