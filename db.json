@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Dr. Ali",
+      "email": "ali@gmail.com",
+      "password": "123456",
+      "role": "doctor",
+      "specialization": "Kardiolog",
+      "bio": "10 yillik tajribaga ega shifokor"
+    }
+  ]
+}

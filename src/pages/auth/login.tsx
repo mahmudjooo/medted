@@ -1,4 +1,3 @@
-// src/pages/auth/login.tsx
 import React, { useState } from "react";
 import { useAuthStore } from "../../store/authStore";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +31,7 @@ const BackgroundBox = styled(Box)(() => ({
     "url('https://img.freepik.com/free-vector/blue-medical-background-with-hexagonal-shapes_1017-19366.jpg')",
   backgroundSize: "cover",
   backgroundPosition: "center",
-  height: "100vh",
+  minHeight: "100vh", // h-screen
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -51,7 +50,6 @@ const LoginPage: React.FC = () => {
 
     if (foundUser) {
       setUser(foundUser);
-
       switch (foundUser.role) {
         case "admin":
           navigate("/admin");
@@ -76,10 +74,14 @@ const LoginPage: React.FC = () => {
         elevation={8}
         sx={{
           width: 400,
+          minHeight: "100vh", // h-screen
           p: 5,
-          borderRadius: 4,
-          bgcolor: "rgba(255,255,255,0.9)",
-          backdropFilter: "blur(8px)",
+          borderRadius: 0,
+          // shaffoflikni oshirdim
+          backdropFilter: "initial",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
         <motion.div
@@ -100,6 +102,12 @@ const LoginPage: React.FC = () => {
           initial={{ opacity: 0, x: -80 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
+          style={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
         >
           <TextField
             label="Email"

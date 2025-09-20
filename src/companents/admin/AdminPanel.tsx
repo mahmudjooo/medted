@@ -1,14 +1,27 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CardHeader,
+  TextField,
+  Button,
+  Grid,
+  Avatar,
+  MenuItem,
+  Paper,
+} from "@mui/material";
 
 interface User {
   id: string;
   name: string;
   email: string;
-  role: "doctor" | "reception";
+  role: "admin" | "doctor" | "reception";
   avatar?: string;
   specialization?: string;
-  dbio?: string;
+  bio?: string;
 }
 
 export default function AdminPanel() {
@@ -46,119 +59,147 @@ export default function AdminPanel() {
   }, []);
 
   return (
-    <div
-      className="p-6 min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url('https://img.freepik.com/free-vector/blue-abstract-medical-background-with-hexagons_1017-19369.jpg')",
-      }}
-    >
-      <div className="bg-white bg-opacity-90 h-screen p-6 rounded-2xl shadow-lg">
-        <h1 className="text-3xl font-bold mb-6 text-blue-600">
-          👨‍⚕️ Admin Panel
-        </h1>
+    <Box sx={{ p: 4, minHeight: "100vh", bgcolor: "grey.100" }}>
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        color="primary"
+        textAlign="center"
+        mb={4}
+      >
+        👨‍⚕️ Admin Panel
+      </Typography>
 
-        {/* Yangi user qo‘shish formasi */}
-        <form
-          onSubmit={handleAdd}
-          className="bg-gradient-to-r from-blue-50 to-blue-100 shadow-lg p-6 rounded-2xl max-w-lg border border-blue-200"
-        >
-          <h2 className="text-2xl font-semibold mb-6 text-gray-700 text-center">
-            ➕ Yangi foydalanuvchi qo‘shish
-          </h2>
-          <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="Ismi"
+      {/* Add User Form */}
+      <Card sx={{ maxWidth: 600, mx: "auto", mb: 6, boxShadow: 4 }}>
+        <CardHeader
+          title="➕ Yangi foydalanuvchi qo‘shish"
+          titleTypographyProps={{ variant: "h6", textAlign: "center" }}
+        />
+        <CardContent>
+          <Box
+            component="form"
+            onSubmit={handleAdd}
+            sx={{ display: "grid", gap: 2 }}
+          >
+            <TextField
+              label="Ism"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full p-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+              fullWidth
+              variant="outlined"
             />
-            <input
+            <TextField
+              label="Email"
               type="email"
-              placeholder="Email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full p-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+              fullWidth
+              variant="outlined"
             />
-            <input
+            <TextField
+              label="Parol"
               type="password"
-              placeholder="Parol"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="w-full p-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+              fullWidth
+              variant="outlined"
             />
 
-            <select
+            <TextField
+              label="Rol"
+              select
               value={form.role}
               onChange={(e) => setForm({ ...form, role: e.target.value })}
-              className="w-full p-3 border rounded-xl shadow-sm bg-white focus:ring-2 focus:ring-blue-400 outline-none"
+              fullWidth
+              variant="outlined"
             >
-              <option value="doctor">Doctor</option>
-              <option value="reception">Reception</option>
-            </select>
+              <MenuItem value="doctor">Doctor</MenuItem>
+              <MenuItem value="reception">Reception</MenuItem>
+            </TextField>
 
             {form.role === "doctor" && (
               <>
-                <input
-                  type="text"
-                  placeholder="Mutaxassisligi"
+                <TextField
+                  label="Mutaxassisligi"
                   value={form.specialization}
                   onChange={(e) =>
                     setForm({ ...form, specialization: e.target.value })
                   }
-                  className="w-full p-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+                  fullWidth
+                  variant="outlined"
                 />
-                <textarea
-                  placeholder="Bio"
+                <TextField
+                  label="Bio"
+                  multiline
+                  rows={3}
                   value={form.bio}
                   onChange={(e) => setForm({ ...form, bio: e.target.value })}
-                  className="w-full p-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+                  fullWidth
+                  variant="outlined"
                 />
               </>
             )}
-          </div>
 
-          <button
-            type="submit"
-            className="mt-6 w-full bg-blue-500 hover:bg-blue-600 transition text-white font-bold py-3 rounded-xl shadow-md"
-          >
-            ➕ Qo‘shish
-          </button>
-        </form>
-
-        {/* Ro‘yxat */}
-        <h2 className="text-2xl font-bold mt-10 mb-6 text-gray-700">
-          👥 Foydalanuvchilar
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {users.map((u) => (
-            <div
-              key={u.id}
-              className="shadow-md p-6 rounded-2xl bg-white bg-opacity-90 text-center hover:shadow-xl transition"
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2, fontWeight: "bold" }}
             >
-              <img
-                src={
-                  u.avatar ||
-                  "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                }
-                alt={u.name}
-                className="w-24 h-24 rounded-full mx-auto shadow-md"
-              />
-              <h3 className="text-xl font-bold mt-4">{u.name}</h3>
-              <p className="text-gray-600 capitalize">{u.role}</p>
-              {u.role === "doctor" && (
-                <div className="mt-2">
-                  <p className="text-gray-500 font-medium">
-                    {u.specialization}
-                  </p>
-                  <p className="text-sm text-gray-400 mt-1">{u.dbio}</p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+              ➕ Qo‘shish
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+
+      {/* Users List */}
+      <Typography variant="h5" fontWeight="bold" textAlign="center" mb={3}>
+        👥 Foydalanuvchilar
+      </Typography>
+
+      <Grid container spacing={3}>
+        {users.map((u) => (
+          <Grid item xs={12} sm={6} md={4} key={u.id}>
+            <Card sx={{ boxShadow: 3, borderRadius: 3 }}>
+              <CardContent sx={{ textAlign: "center" }}>
+                <Avatar
+                  src={
+                    u.avatar ||
+                    "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                  }
+                  sx={{
+                    width: 80,
+                    height: 80,
+                    mx: "auto",
+                    boxShadow: 2,
+                  }}
+                />
+                <Typography variant="h6" fontWeight="bold" mt={2}>
+                  {u.name}
+                </Typography>
+                <Typography color="text.secondary" textTransform="capitalize">
+                  {u.role}
+                </Typography>
+                {u.role === "doctor" && (
+                  <Box mt={1}>
+                    <Typography variant="body2" color="text.primary">
+                      {u.specialization}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      fontStyle="italic"
+                    >
+                      {u.bio}
+                    </Typography>
+                  </Box>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 }

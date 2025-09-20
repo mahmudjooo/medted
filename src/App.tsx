@@ -10,6 +10,8 @@ import DoctorList from "./companents/doctor/DoctorList";
 import DoctorProfile from "./companents/doctor/DoctorProfile";
 import AdminPanel from "./companents/admin/AdminPanel";
 import ReceptionPanel from "./companents/resiption/ReceptionPanel";
+import AdminDashboard from "./companents/admin/AdminDashboard";
+import Dashboard from "./pages/Dashboard";
 
 const theme = createTheme();
 
@@ -38,7 +40,10 @@ const App: React.FC = () => {
         <Route path="/doctors/:id" element={<DoctorProfile />} />
 
         {/* Admin */}
-        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+
+        {/* 👩‍⚕️ Doctor va Reception foydalanuvchilari uchun umumiy dashboard */}
+        <Route path="/dashboard" element={<Dashboard />} />
 
         {/* Reception */}
         <Route path="/reception" element={<ReceptionPanel />} />

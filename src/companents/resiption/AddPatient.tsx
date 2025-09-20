@@ -14,29 +14,53 @@ export default function AddPatient({ onAdded }: { onAdded: () => void }) {
   const [doctorId, setDoctorId] = useState("");
   const [doctors, setDoctors] = useState<Doctor[]>([]);
 
+  // ❌ Buni ishlatmasak ham qolaversin
+  const handleAdd = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // const newUser = { ...form };
+
+    // // faqat doctor qo‘shishni tekshirish
+    // if (newUser.role === "doctor") {
+    //   await axios.post("http://localhost:3000/users", newUser); // db.json ichiga yoziladi
+    //   loadUsers();
+    // }
+
+    // setForm({
+    //   name: "",
+    //   email: "",
+    //   password: "",
+    //   role: "doctor",
+    //   specialization: "",
+    //   bio: "",
+    // });
+  };
+
+  // 🔹 Doktorlarni db.json dan olish
   useEffect(() => {
     axios
-      .get("https://api.example.com/doctors")
+      .get("http://localhost:3000/users?role=doctor")
       .then((res) => setDoctors(res.data));
   }, []);
 
+  // 🔹 Bemor qo‘shish
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("https://api.example.com/patients", {
+      await axios.post("http://localhost:3000/patients", {
         name,
         age,
         illness,
         doctorId,
       });
-      alert("Bemor qo‘shildi va doktorga yuborildi!");
+      alert("✅ Bemor qo‘shildi va doktorga biriktirildi!");
       onAdded();
       setName("");
       setAge(0);
       setIllness("");
       setDoctorId("");
     } catch (err) {
-      alert("Xatolik yuz berdi!");
+      alert("❌ Xatolik yuz berdi!");
     }
   };
 
