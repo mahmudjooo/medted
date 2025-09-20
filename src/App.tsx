@@ -9,14 +9,12 @@ import axios from "axios";
 import DoctorList from "./companents/doctor/DoctorList";
 import DoctorProfile from "./companents/doctor/DoctorProfile";
 import AdminPanel from "./companents/admin/AdminPanel";
-import AdminLogin from "./companents/admin/AdminLogin";
 import ReceptionPanel from "./companents/resiption/ReceptionPanel";
 
 const theme = createTheme();
 
 const App: React.FC = () => {
   const [doctors, setDoctors] = useState<any[]>([]);
-  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     axios
@@ -40,16 +38,7 @@ const App: React.FC = () => {
         <Route path="/doctors/:id" element={<DoctorProfile />} />
 
         {/* Admin */}
-        <Route
-          path="/admin"
-          element={
-            isAdmin ? (
-              <AdminPanel />
-            ) : (
-              <AdminLogin onLogin={() => setIsAdmin(true)} />
-            )
-          }
-        />
+        <Route path="/admin" element={<AdminPanel />} />
 
         {/* Reception */}
         <Route path="/reception" element={<ReceptionPanel />} />
